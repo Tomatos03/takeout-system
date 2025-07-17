@@ -34,5 +34,19 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <!-- PageHelper插件
+             使用注意事项:
+             https://github.com/pagehelper/Mybatis-PageHelper/blob/master/wikis/zh/Important.md
+             使用参考文档:
+             https://github.com/pagehelper/Mybatis-PageHelper/blob/master/wikis/zh/HowToUse.md
+            当前版本支持 JDK17+ 和以下依赖版本：
+            mybatis-spring-boot-starter 3.0.4
+            spring-boot-dependencies 3.5.0
+        -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>2.1.1</version>
+        </dependency>
     </dependencies>
 </project>

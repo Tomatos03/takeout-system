@@ -3,8 +3,8 @@ package com.takeout.handler;
 import com.takeout.constant.MessageConst;
 import com.takeout.util.Result;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 
@@ -13,7 +13,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
  * @date : 2025/7/18
  */
 @Slf4j
-@ControllerAdvice
+@RestControllerAdvice
 public class SQLHandler {
     @ExceptionHandler
     public Result handleUserAlreadyHas(SQLIntegrityConstraintViolationException ex) {

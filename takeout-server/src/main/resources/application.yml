@@ -1,0 +1,29 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: dev
+  datasource:
+    username: ${takeout.datasource.username}
+    password: ${takeout.datasource.password}
+    url: ${takeout.datasource.url}
+    driver-class-name: ${takeout.datasource.driver-class-name}
+
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true #驼峰命名映射 idNUmber -> id_number
+
+# https://github.com/pagehelper/Mybatis-PageHelper/blob/master/wikis/zh/HowToUse.md
+pagehelper:
+  helper-dialect: 'mariadb'
+  offset-as-page-num: true
+  page-size-zero: true
+logging:
+  level:
+    com:
+      takeout:
+        mapper: debug
+        service: info

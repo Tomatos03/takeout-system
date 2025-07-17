@@ -1,21 +1,27 @@
 package com.takeout.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.takeout.constant.AccountStatusConst;
+import com.takeout.context.EmployeeContext;
 import com.takeout.dto.EmployeeDTO;
+import com.takeout.dto.EmployeePageQueryDTO;
 import com.takeout.entity.Employee;
 import com.takeout.mapper.EmployeeMapper;
 import com.takeout.service.EmployeeService;
+import com.takeout.util.PageResult;
 import com.takeout.util.PasswordUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
- * 
- * 
+ *
+ *
  * @author : Tomatos
  * @date : 2025/7/17
  */
@@ -39,9 +45,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setPassword(defaultEncryptedPassword);
         employee.setCreateTime(LocalDateTime.now());
         employee.setUpdateTime(LocalDateTime.now());
-        // TODO 暂时设置最后修改人ID 和 创建人ID都为1
-        employee.setUpdateUser(1L);
-        employee.setCreateUser(1L);
+
+        Long currentEmpId= EmployeeContext.getCurrentEmpId();
+        employee.setUpdateUser(currentEmpId);
+        employee.setCreateUser(currentEmpId);
 
         employeeMapper.add(employee);
     }
@@ -73,8 +80,43 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee getEmployeeByUsername(String username) {
-        Employee employee = employeeMapper.getEmployeeByUsername(username);
-        return employee;
+    public PageResult<Employee> pageQuery(EmployeePageQueryDTO pageQueryDTO) {
+        int pageNum = pageQueryDTO.getPage();
+        int pageSize = pageQueryDTO.getPageSize();
+        String name = pageQueryDTO.getName();
+
+        PageHelper.startPage(pageNum, pageSize);
+        List<Employee> empList = employeeMapper.getEmployeeByName(name);
+        PageInfo<Employee> pageInfo = new PageInfo<>(empList);
+
+        PageResult<Employee> pageResult = new PageResult<>(pageInfo.getTotal(), pageInfo.getList());
+        return pageResult;
+    }
+
+    @Override
+    public void startOrStop(Integer status, Long id) {
+        Employee employee = Employee.builder()
+                                    .status(status)
+                                    .id(id)
+                                    .build();
+        employeeMapper.update(employee);
+    }
+
+    @Override
+    public int updateInfo(EmployeeDTO employeeDTO) {
+        Employee employee = BeanUtil.copyProperties(employeeDTO, Employee.class);
+
+        Long currentEmpId = EmployeeContext.getCurrentEmpId();
+        employee.setUpdateUser(currentEmpId);
+        employee.setUpdateTime(LocalDateTime.now());
+        // 受影响的行数
+        int row = employeeMapper.update(employee);
+        return row;
+    }
+
+    @Override
+    public Employee getEmployeeById(Long id) {
+        Employee employeeById = employeeMapper.getEmployeeById(id);
+        return employeeById;
     }
 }

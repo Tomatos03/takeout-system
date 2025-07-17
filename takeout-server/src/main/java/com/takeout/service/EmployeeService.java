@@ -1,7 +1,9 @@
 package com.takeout.service;
 
 import com.takeout.dto.EmployeeDTO;
+import com.takeout.dto.EmployeePageQueryDTO;
 import com.takeout.entity.Employee;
+import com.takeout.util.PageResult;
 
 /**
  * 
@@ -14,5 +16,11 @@ public interface EmployeeService {
 
     Employee login(EmployeeDTO employeeDTO);
 
-    Employee getEmployeeByUsername(String username);
+    PageResult<Employee> pageQuery(EmployeePageQueryDTO pageQueryDTO);
+
+    void startOrStop(Integer status, Long id);
+
+    int updateInfo(EmployeeDTO employeeDTO);
+
+    Employee getEmployeeById(Long id);
 }
