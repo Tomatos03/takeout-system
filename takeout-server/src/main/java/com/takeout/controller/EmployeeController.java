@@ -79,7 +79,6 @@ public class EmployeeController {
     public Result<Employee> getEmployeeById(@PathVariable Long id){
         log.info("查询员工{}的信息", id);
         Employee employee = employeeService.getEmployeeById(id);
-        employee.setPassword("*******");
         return Result.success(employee);
     }
 

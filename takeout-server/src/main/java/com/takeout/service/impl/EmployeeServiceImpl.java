@@ -4,7 +4,6 @@ import cn.hutool.core.bean.BeanUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.takeout.constant.AccountStatusConst;
-import com.takeout.context.EmployeeContext;
 import com.takeout.dto.EmployeeDTO;
 import com.takeout.dto.EmployeePageQueryDTO;
 import com.takeout.entity.Employee;
@@ -16,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -43,12 +41,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         // 设置默认密码并使用BCrypt加密
         String defaultEncryptedPassword = PasswordUtil.encode("123456");
         employee.setPassword(defaultEncryptedPassword);
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
-
-        Long currentEmpId= EmployeeContext.getCurrentEmpId();
-        employee.setUpdateUser(currentEmpId);
-        employee.setCreateUser(currentEmpId);
 
         employeeMapper.add(employee);
     }
@@ -106,9 +98,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     public int updateInfo(EmployeeDTO employeeDTO) {
         Employee employee = BeanUtil.copyProperties(employeeDTO, Employee.class);
 
-        Long currentEmpId = EmployeeContext.getCurrentEmpId();
-        employee.setUpdateUser(currentEmpId);
-        employee.setUpdateTime(LocalDateTime.now());
         // 受影响的行数
         int row = employeeMapper.update(employee);
         return row;
@@ -116,7 +105,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee getEmployeeById(Long id) {
-        Employee employeeById = employeeMapper.getEmployeeById(id);
-        return employeeById;
+        Employee employee = employeeMapper.getEmployeeById(id);
+        employee.setPassword(null);
+        return employee;
     }
 }
