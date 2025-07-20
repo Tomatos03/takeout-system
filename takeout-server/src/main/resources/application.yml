@@ -27,3 +27,10 @@ logging:
       takeout:
         mapper: debug
         service: info
+# https://cloud.tencent.com/document/product/436
+tencent-cloud-cos:
+  region: ${tencent-cloud-cos.region}
+  access-key-id: ${tencent-cloud-cos.access-key-id}
+  access-key-secret: ${tencent-cloud-cos.access-key-secret}
+  bucket-name: ${tencent-cloud-cos.bucket-name}
+  storage: ${tencent-cloud-cos.storage-path}
