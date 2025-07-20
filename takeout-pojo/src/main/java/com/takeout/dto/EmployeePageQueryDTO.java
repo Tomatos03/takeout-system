@@ -13,8 +13,6 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmployeePageQueryDTO implements Serializable {
-    String name; // 员工名称
-    int page; // 页面编号, 表示从第几页开始查询
-    int pageSize; // 单页大小
+public class EmployeePageQueryDTO extends PageQueryDTO implements Serializable {
+    private String name; // 员工名称
 }
