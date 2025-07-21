@@ -1,4 +1,4 @@
-package com.takeout.controller;
+package com.takeout.controller.amdin;
 
 import com.takeout.service.CommonService;
 import lombok.extern.slf4j.Slf4j;

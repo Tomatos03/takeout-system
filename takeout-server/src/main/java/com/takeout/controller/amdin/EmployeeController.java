@@ -1,4 +1,4 @@
-package com.takeout.controller;
+package com.takeout.controller.amdin;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.takeout.constant.JwsClaimConst;
