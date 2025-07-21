@@ -1,4 +1,4 @@
-package com.takeout.controller;
+package com.takeout.controller.amdin;
 
 import com.takeout.service.CategoryService;
 import com.takeout.util.Result;
