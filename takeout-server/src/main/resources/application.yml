@@ -30,7 +30,7 @@ logging:
 # https://cloud.tencent.com/document/product/436
 tencent-cloud-cos:
   region: ${tencent-cloud-cos.region}
-  access-key-id: ${tencent-cloud-cos.access-key-id}
-  access-key-secret: ${tencent-cloud-cos.access-key-secret}
+  secret-id: ${tencent-cloud-cos.secret-id}
+  secret-key: ${tencent-cloud-cos.secret-key}
   bucket-name: ${tencent-cloud-cos.bucket-name}
   storage: ${tencent-cloud-cos.storage-path}
