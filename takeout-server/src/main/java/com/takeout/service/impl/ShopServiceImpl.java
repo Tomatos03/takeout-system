@@ -1,7 +1,8 @@
-package com.takeout.service;
+package com.takeout.service.impl;
 
 import com.takeout.constant.RedisConst;
 import com.takeout.constant.ShopStatusConst;
+import com.takeout.service.ShopService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
