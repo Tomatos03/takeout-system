@@ -13,13 +13,14 @@ import com.takeout.exception.DeletionNotAllowedException;
 import com.takeout.mapper.DishFlavorMapper;
 import com.takeout.mapper.DishMapper;
 import com.takeout.mapper.SetMealDishMapper;
-import com.takeout.service.DishServiceService;
+import com.takeout.service.DishService;
 import com.takeout.util.PageResult;
 import com.takeout.vo.DishVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ import java.util.List;
  * @date : 2025/7/19
  */
 @Service
-public class DishServiceServiceImpl implements DishServiceService {
+public class DishServiceImpl implements DishService {
     @Autowired
     DishMapper dishMapper;
 
@@ -117,12 +118,35 @@ public class DishServiceServiceImpl implements DishServiceService {
             flavors.forEach(this::updateFlavor);
     }
 
+    @Override
+    public List<DishVO> getDishList(Integer categoryId) {
+        if (!checkIfCategoryEnable())
+            throw new RuntimeException();
+
+        List<Dish> dishes = dishMapper.queryByCategoryId(categoryId);
+
+        List<DishVO> dishVOS = new ArrayList<>();
+        for (Dish dish : dishes) {
+            List<DishFlavor> flavors = dishFlavorMapper.queryByDishId(dish.getId());
+
+            DishVO dishVO = BeanUtil.copyProperties(dish, DishVO.class);
+            dishVO.setFlavors(flavors);
+
+            dishVOS.add(dishVO);
+        }
+        return dishVOS;
+    }
+
+    private boolean checkIfCategoryEnable() {
+        return false;
+    }
+
     private void updateFlavor(DishFlavor dishFlavor) {
         dishFlavorMapper.update(dishFlavor);
     }
 
     private void checkIfRelatedPackage(Long id) {
-        long count = setMealDishMapper.querySetMealNumByDishID(id);
+        long count = setMealDishMapper.queryNumByDishID(id);
         if (count != 0)
             throw new DeletionNotAllowedException(MessageConst.DISH_ASSOCIATED);
     }

@@ -3,7 +3,7 @@ package com.takeout.controller.amdin;
 import com.takeout.dto.DishDTO;
 import com.takeout.dto.DishPageQueryDTO;
 import com.takeout.entity.Dish;
-import com.takeout.service.DishServiceService;
+import com.takeout.service.DishService;
 import com.takeout.util.PageResult;
 import com.takeout.util.Result;
 import com.takeout.vo.DishVO;
@@ -18,11 +18,11 @@ import java.util.List;
  * @date : 2025/7/19
  */
 @Slf4j
-@RestController
+@RestController("adminDishController")
 @RequestMapping("/admin/dish")
 public class DishController {
     @Autowired
-    private DishServiceService dishServiceService;
+    private DishService dishServiceService;
 
     @PostMapping
     public Result add(@RequestBody DishDTO dishDTO) {

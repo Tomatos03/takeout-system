@@ -11,7 +11,7 @@ import java.util.List;
  * @author : Tomatos
  * @date : 2025/7/19
  */
-public interface DishServiceService {
+public interface DishService {
     DishVO queryById(Long id);
 
     void add(DishDTO dishDTO);
@@ -21,4 +21,6 @@ public interface DishServiceService {
     void batchDelete(List<Long> ids);
 
     void update(DishDTO dishDTO);
+
+    List<DishVO> getDishList(Integer categoryId);
 }

@@ -28,4 +28,6 @@ public interface DishMapper {
 
     @AutoFill(SqlOperationType.UPDATE)
     void update(Dish dish);
+
+    List<Dish> queryByCategoryId(Integer categoryId);
 }
