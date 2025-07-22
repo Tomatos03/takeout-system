@@ -10,7 +10,6 @@ spring:
     url: ${takeout.datasource.url}
     driver-class-name: ${takeout.datasource.driver-class-name}
 
-
 mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
@@ -21,6 +20,7 @@ pagehelper:
   helper-dialect: 'mariadb'
   offset-as-page-num: true
   page-size-zero: true
+
 logging:
   level:
     com:
@@ -34,3 +34,17 @@ tencent-cloud-cos:
   secret-key: ${tencent-cloud-cos.secret-key}
   bucket-name: ${tencent-cloud-cos.bucket-name}
   storage: ${tencent-cloud-cos.storage-path}
+
+token:
+  admin:
+    expiration: ${token.admin.expiration}
+    prefix: ${token.admin.prefix}
+    secret-key: ${token.admin.secret-key}
+  user:
+    expiration: ${token.user.expiration}
+    prefix: ${token.user.prefix}
+    secret-key: ${token.user.secret-key}
+
+wechat:
+  appid: ${wechat.appid}
+  secret: ${wechat.secret} # appsecret
