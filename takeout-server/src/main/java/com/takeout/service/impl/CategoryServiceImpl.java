@@ -8,8 +8,8 @@ import com.takeout.vo.CategoryVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author : Tomatos
@@ -23,8 +23,11 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryVO> queryByType(int type) {
         List<Category> categories = categoryMapper.query(type);
-        return categories.stream()
-                         .map(category -> BeanUtil.copyProperties(category, CategoryVO.class))
-                         .collect(Collectors.toList());
+        List<CategoryVO> categoryVOS = new ArrayList<>();
+        for (Category category : categories) {
+            CategoryVO categoryVO = BeanUtil.copyProperties(category, CategoryVO.class);
+            categoryVOS.add(categoryVO);
+        }
+        return categoryVOS;
     }
 }

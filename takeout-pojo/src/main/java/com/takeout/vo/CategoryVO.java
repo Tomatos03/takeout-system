@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class CategoryVO {
     private Long id;
     private Integer type;
+    private Integer status;
     private String name;
     private Integer sort;
     private LocalDateTime updateTime;
