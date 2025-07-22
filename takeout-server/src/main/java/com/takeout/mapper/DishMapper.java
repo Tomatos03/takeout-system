@@ -8,6 +8,7 @@ import com.takeout.vo.DishVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author : Tomatos
@@ -28,4 +29,14 @@ public interface DishMapper {
 
     @AutoFill(SqlOperationType.UPDATE)
     void update(Dish dish);
+
+    List<DishVO> queryByDish(Dish dish);
+
+    List<DishVO> queryDishWithFlavors(Dish dish);
+
+    Integer countByCategoryId(Long categoryId);
+
+    Integer countByMap(Map map);
+
+    List<Dish> queryBySetMealId(Long setMealId);
 }

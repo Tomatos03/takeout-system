@@ -5,29 +5,32 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.takeout.constant.DishStatusConst;
 import com.takeout.constant.MessageConst;
+import com.takeout.constant.RedisConst;
 import com.takeout.dto.DishDTO;
-import com.takeout.dto.DishPageQueryDTO;
+import com.takeout.dto.page.DishPageQueryDTO;
 import com.takeout.entity.Dish;
 import com.takeout.entity.DishFlavor;
 import com.takeout.exception.DeletionNotAllowedException;
 import com.takeout.mapper.DishFlavorMapper;
 import com.takeout.mapper.DishMapper;
 import com.takeout.mapper.SetMealDishMapper;
-import com.takeout.service.DishServiceService;
+import com.takeout.service.DishService;
 import com.takeout.util.PageResult;
 import com.takeout.vo.DishVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author : Tomatos
  * @date : 2025/7/19
  */
 @Service
-public class DishServiceServiceImpl implements DishServiceService {
+public class DishServiceImpl implements DishService {
     @Autowired
     DishMapper dishMapper;
 
@@ -36,6 +39,9 @@ public class DishServiceServiceImpl implements DishServiceService {
 
     @Autowired
     SetMealDishMapper setMealDishMapper;
+
+    @Autowired
+    RedisTemplate<String, List<DishVO>> redisTemplate;
 
     @Override
     public DishVO queryById(Long id) {
@@ -64,6 +70,9 @@ public class DishServiceServiceImpl implements DishServiceService {
             dishFlavor.setDishId(dishId);
             dishFlavorMapper.add(dishFlavor);
         });
+
+        String key = RedisConst.DISH_KEY + dishDTO.getCategoryId();
+        cleanCache(key);
     }
 
     @Override
@@ -104,6 +113,8 @@ public class DishServiceServiceImpl implements DishServiceService {
         // 删除菜品表数据数据, 以及关联品味数据
         dishMapper.batchDelete(ids);
         dishFlavorMapper.batchDeleteByDishIds(ids);
+
+        cleanCache(RedisConst.DISH_KEY + "*");
     }
 
     @Override
@@ -115,6 +126,34 @@ public class DishServiceServiceImpl implements DishServiceService {
         List<DishFlavor> flavors = dishDTO.getFlavors();
         if (flavors != null)
             flavors.forEach(this::updateFlavor);
+
+        cleanCache(RedisConst.DISH_KEY + "*");
+    }
+
+    @Override
+    public List<DishVO> getDishList(Long categoryId) {
+        String dishKey = RedisConst.DISH_KEY + categoryId;
+        List<DishVO> dishVOS = redisTemplate.opsForValue().get(dishKey);
+        if (dishVOS != null) {
+            return dishVOS;
+        }
+
+        Dish dish = new Dish();
+        dish.setCategoryId(categoryId);
+        dish.setStatus(DishStatusConst.START_SELL);
+
+        dishVOS = dishMapper.queryDishWithFlavors(dish);
+        // 缓存查询的菜品信息
+        redisTemplate.opsForValue()
+                     .set(dishKey, dishVOS);
+        return dishVOS;
+    }
+
+    @Override
+    public void startOrStop(Integer status, Integer id) {
+        cleanCache("dish_*");
+        
+        //
     }
 
     private void updateFlavor(DishFlavor dishFlavor) {
@@ -122,7 +161,7 @@ public class DishServiceServiceImpl implements DishServiceService {
     }
 
     private void checkIfRelatedPackage(Long id) {
-        long count = setMealDishMapper.querySetMealNumByDishID(id);
+        long count = setMealDishMapper.queryNumByDishID(id);
         if (count != 0)
             throw new DeletionNotAllowedException(MessageConst.DISH_ASSOCIATED);
     }
@@ -131,5 +170,12 @@ public class DishServiceServiceImpl implements DishServiceService {
         Dish dish = dishMapper.queryById(id);
         if (dish.getStatus() == DishStatusConst.STOP_SELL)
             throw new DeletionNotAllowedException(MessageConst.DISH_SELLING);
+    }
+
+    private void cleanCache(String pattern) {
+        // KEYS 会全量扫描所有 key，数据量大时会阻塞 Redis，影响线上性能
+        // 得到满足相关模式的所有key
+        Set<String> keys = redisTemplate.keys(pattern);
+        redisTemplate.delete(keys);
     }
 }
