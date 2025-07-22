@@ -4,7 +4,7 @@ package com.takeout.context;
  * @author : Tomatos
  * @date : 2025/7/18
  */
-public class EmployeeContext {
+public class LoginContext {
     private static ThreadLocal<Long> threadLocal = new ThreadLocal<>();
 
     public static void setCurrentEmpId(Long id) {

@@ -1,5 +1,7 @@
 package com.takeout.interceptor;
 
+
+import com.takeout.constant.JwsClaimConst;
 import com.takeout.context.LoginContext;
 import com.takeout.properties.JwsProperties;
 import com.takeout.util.JwsUtil;
@@ -17,17 +19,14 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 /**
  * @author : Tomatos
- * @date : 2025/7/18
+ * @date : 2025/7/21
  */
-@Component
 @Slf4j
-public class JwsInterceptor implements HandlerInterceptor {
+@Component
+public class UserJwtInterceptor implements HandlerInterceptor {
     @Autowired
-    private JwsProperties jwsProperties;
+    JwsProperties jwsProperties;
 
-    /*
-     *  请求资源都需要验证是否持有Token, 持有正常放行, 不持有拦截并返回状态码401禁止访问
-     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         // Interceptor默认不拦截静态资源, 为了代码健壮性添加本行代码
@@ -37,17 +36,17 @@ public class JwsInterceptor implements HandlerInterceptor {
         }
 
         log.info("尝试解析Token...");
-        String tokenPrefix = jwsProperties.getAdmin().getPrefix();
+        JwsProperties.User jwsUser = jwsProperties.getUser();
+        String tokenPrefix = jwsUser.getPrefix();
         String token = request.getHeader(tokenPrefix);
         if (token == null) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             return false;
         }
 
-        JwsProperties.Admin jwsAdmin = jwsProperties.getAdmin();
         Jws<Claims> claimsJws;
         try {
-            claimsJws = JwsUtil.parseVerifyJws(jwsAdmin.getSecretKey(), token);
+            claimsJws = JwsUtil.parseVerifyJws(jwsUser.getSecretKey(), token);
         } catch (JwtException ex) {
             log.info("解析Token失败");
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
@@ -56,8 +55,8 @@ public class JwsInterceptor implements HandlerInterceptor {
 
         log.info("解析Token成功");
         Claims payload = claimsJws.getPayload();
-        Long userId = Long.valueOf((String) payload.get("userid"));
-        LoginContext.setCurrentEmpId(userId);
+        Long empId = Long.valueOf((String) payload.get(JwsClaimConst.EMP_ID));
+        LoginContext.setCurrentEmpId(empId);
         return true;
     }
 }
