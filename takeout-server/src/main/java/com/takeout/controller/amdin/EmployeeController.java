@@ -55,7 +55,8 @@ public class EmployeeController {
         Payload<String> payload = new Payload<>(new HashMap<>());
         payload.addClaim(JwsClaimConst.EMP_ID, employeeLoginVO.getId().toString());
 
-        String token = JwsUtil.createJws(jwsProperties, payload);
+        JwsProperties.User jwtUser = jwsProperties.getUser();
+        String token = JwsUtil.createJws(jwtUser.getExpiration(), jwtUser.getSecretKey(), payload);
         employeeLoginVO.setToken(token);
 
         return Result.success(employeeLoginVO);

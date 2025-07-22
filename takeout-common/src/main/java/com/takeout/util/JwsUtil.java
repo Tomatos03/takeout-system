@@ -1,7 +1,6 @@
 package com.takeout.util;
 
 import com.takeout.model.Payload;
-import com.takeout.properties.JwsProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -17,15 +16,15 @@ import java.util.Date;
 public class JwsUtil {
 //    private final static SecretKey secretKey = Jwts.SIG.HS256.key().build();
 
-    public static <T> String createJws(JwsProperties jwsProperties, Payload<T> payload) {
-        if (jwsProperties == null || payload == null)
+    public static <T> String createJws(Long expiration, String secret,Payload<T> payload) {
+        if (expiration == null || payload == null || secret == null)
                 throw new NullPointerException();
 
         // jwsProperties之中的过期时间单位是秒, 这里需要转换为毫秒
-        long jwsExpiration = System.currentTimeMillis() + jwsProperties.getExpiration() * 1000L;
+        long jwsExpiration = System.currentTimeMillis() + expiration * 1000L;
         return Jwts.builder()
                    .expiration(new Date(jwsExpiration))
-                   .signWith(Keys.hmacShaKeyFor(jwsProperties.getSecretKey().getBytes()))
+                   .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
                    .claims(payload.getClaims())
                    .compact();
     }
@@ -36,9 +35,9 @@ public class JwsUtil {
 //        return encoder.encodeToString(encoded);
 //    }
 
-    public static Jws<Claims> parseVerifyJws(JwsProperties jwsProperties, String jws) throws JwtException{
+    public static Jws<Claims> parseVerifyJws(String secret, String jws) throws JwtException{
         return Jwts.parser()
-                   .verifyWith(Keys.hmacShaKeyFor(jwsProperties.getSecretKey().getBytes()))
+                   .verifyWith(Keys.hmacShaKeyFor(secret.getBytes()))
                    .build() // 构建一个使用secretKey验证JWS的Parser对象
                    .parseSignedClaims(jws); // 解析得到 payload
     }

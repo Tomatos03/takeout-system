@@ -8,8 +8,20 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "token")
 public class JwsProperties {
-    // 以秒为单位
-    private Long expiration;
-    private String prefix;
-    private String secretKey;
+    private Admin admin;
+    private User user;
+
+    @Data
+    public static class Admin {
+        private Long expiration;
+        private String prefix;
+        private String secretKey;
+    }
+
+    @Data
+    public static class User {
+        private Long expiration;
+        private String prefix;
+        private String secretKey;
+    }
 }
