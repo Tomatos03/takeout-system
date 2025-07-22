@@ -9,10 +9,16 @@
             </foreach>
     </delete>
 
-
-
-    <select id="querySetMealNumByDishID" resultType="java.lang.Long">
+    <select id="queryNumByDishID" resultType="java.lang.Long">
         SELECT COUNT(*) FROM setmeal_dish
         WHERE id = #{id}
+    </select>
+
+    <select id="queryCopiesById" resultType="java.lang.Integer">
+        SELECT copies FROM setmeal_dish
+        WHERE
+            setmeal_id = #{setMealId}
+          AND
+            dish_id = #{dishId}
     </select>
 </mapper>

@@ -10,7 +10,9 @@ import java.util.List;
  */
 @Mapper
 public interface SetMealDishMapper {
-      long querySetMealNumByDishID(Long id);
+      long queryNumByDishID(Long id);
 
       void batchDelete(List<Long> ids);
+
+      Integer queryCopiesById(Integer setMealId, Long dishId);
 }
