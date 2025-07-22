@@ -2,7 +2,7 @@ package com.takeout.aspect;
 
 import com.takeout.annotation.AutoFill;
 import com.takeout.constant.AutoFillConst;
-import com.takeout.context.EmployeeContext;
+import com.takeout.context.LoginContext;
 import com.takeout.enums.SqlOperationType;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -37,7 +37,7 @@ public class AutoFillAspect {
         Object entity = args[0];
         Class<?> classZ = entity.getClass();
 
-        Long currentEmpId = EmployeeContext.getCurrentEmpId();
+        Long currentEmpId = LoginContext.getCurrentEmpId();
         LocalDateTime now = LocalDateTime.now();
         try {
             Method updateUser = classZ.getMethod(AutoFillConst.SET_UPDATE_USER, Long.class);
