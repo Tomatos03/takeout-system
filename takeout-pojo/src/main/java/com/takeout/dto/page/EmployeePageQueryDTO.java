@@ -1,4 +1,4 @@
-package com.takeout.dto;
+package com.takeout.dto.page;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

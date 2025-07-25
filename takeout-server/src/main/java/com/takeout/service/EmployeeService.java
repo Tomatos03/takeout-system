@@ -1,7 +1,7 @@
 package com.takeout.service;
 
 import com.takeout.dto.EmployeeDTO;
-import com.takeout.dto.EmployeePageQueryDTO;
+import com.takeout.dto.page.EmployeePageQueryDTO;
 import com.takeout.entity.Employee;
 import com.takeout.util.PageResult;
 

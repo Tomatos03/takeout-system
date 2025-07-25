@@ -3,7 +3,7 @@ package com.takeout.controller.amdin;
 import cn.hutool.core.bean.BeanUtil;
 import com.takeout.constant.JwsClaimConst;
 import com.takeout.dto.EmployeeDTO;
-import com.takeout.dto.EmployeePageQueryDTO;
+import com.takeout.dto.page.EmployeePageQueryDTO;
 import com.takeout.entity.Employee;
 import com.takeout.model.Payload;
 import com.takeout.properties.JwsProperties;

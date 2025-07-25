@@ -5,7 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.takeout.constant.AccountStatusConst;
 import com.takeout.dto.EmployeeDTO;
-import com.takeout.dto.EmployeePageQueryDTO;
+import com.takeout.dto.page.EmployeePageQueryDTO;
 import com.takeout.entity.Employee;
 import com.takeout.mapper.EmployeeMapper;
 import com.takeout.service.EmployeeService;
