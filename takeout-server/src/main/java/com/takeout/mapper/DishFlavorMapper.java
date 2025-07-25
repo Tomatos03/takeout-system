@@ -18,8 +18,6 @@ public interface DishFlavorMapper {
     @AutoFill(SqlOperationType.ADD)
     void add(DishFlavor dishFlavor);
 
-    void batchAdd(List<DishFlavor> flavors);
-
     void batchDeleteByDishIds(List<Long> ids);
 
     @AutoFill(SqlOperationType.UPDATE)
