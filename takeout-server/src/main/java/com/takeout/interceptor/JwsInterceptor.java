@@ -57,7 +57,7 @@ public class JwsInterceptor implements HandlerInterceptor {
         log.info("解析Token成功");
         Claims payload = claimsJws.getPayload();
         Long userId = Long.valueOf((String) payload.get("userid"));
-        LoginContext.setCurrentEmpId(userId);
+        LoginContext.setCurrentId(userId);
         return true;
     }
 }
