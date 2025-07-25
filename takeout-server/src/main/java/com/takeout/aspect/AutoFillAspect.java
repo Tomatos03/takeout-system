@@ -37,7 +37,7 @@ public class AutoFillAspect {
         Object entity = args[0];
         Class<?> classZ = entity.getClass();
 
-        Long currentEmpId = LoginContext.getCurrentEmpId();
+        Long currentEmpId = LoginContext.getCurrentId();
         LocalDateTime now = LocalDateTime.now();
         try {
             Method updateUser = classZ.getMethod(AutoFillConst.SET_UPDATE_USER, Long.class);

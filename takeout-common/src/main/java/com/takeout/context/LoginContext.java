@@ -7,15 +7,15 @@ package com.takeout.context;
 public class LoginContext {
     private static ThreadLocal<Long> threadLocal = new ThreadLocal<>();
 
-    public static void setCurrentEmpId(Long id) {
+    public static void setCurrentId(Long id) {
         threadLocal.set(id);
     }
 
-    public static Long getCurrentEmpId() {
+    public static Long getCurrentId() {
         return threadLocal.get();
     }
 
-    public static void removeCurrentEmpId() {
+    public static void removeCurrentId() {
         threadLocal.remove();
     }
 }
