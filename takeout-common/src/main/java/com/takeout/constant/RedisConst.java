@@ -6,4 +6,5 @@ package com.takeout.constant;
  */
 public class RedisConst {
     public static final String SHOP_STATUS_KEY = "shop:status";
+    public static final String DISH_KEY = "dish:";
 }
