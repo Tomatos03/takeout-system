@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.takeout.mapper.OrderDetailMapper">
+
+    <insert id="insert" parameterType="com.takeout.entity.OrderDetail">
+        INSERT INTO order_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="image != null">image,</if>
+            <if test="orderId != null">order_id,</if>
+            <if test="dishId != null">dish_id,</if>
+            <if test="setmealId != null">setmeal_id,</if>
+            <if test="dishFlavor != null">dish_flavor,</if>
+            <if test="number != null">number,</if>
+            <if test="amount != null">amount,</if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="image != null">#{image},</if>
+            <if test="orderId != null">#{orderId},</if>
+            <if test="dishId != null">#{dishId},</if>
+            <if test="setmealId != null">#{setmealId},</if>
+            <if test="dishFlavor != null">#{dishFlavor},</if>
+            <if test="number != null">#{number},</if>
+            <if test="amount != null">#{amount},</if>
+        </trim>
+    </insert>
+
+    <insert id="insertBatch">
+        insert into order_detail
+        (id, name, image, order_id, dish_id, setmeal_id, dish_flavor, number, amount)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.id}, #{item.name}, #{item.image}, #{item.orderId}, #{item.dishId}, #{item.setmealId}, #{item.dishFlavor}, #{item.number}, #{item.amount})
+        </foreach>
+    </insert>
+    <select id="queryByOrderId" resultType="com.takeout.entity.OrderDetail">
+        SELECT * FROM order_detail
+        WHERE order_id = #{orderId}
+    </select>
+</mapper>
